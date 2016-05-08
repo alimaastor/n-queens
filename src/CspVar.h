@@ -4,16 +4,33 @@
 
 #include <map>
 
+#include "CspDomain.h"
+
 template <class DataType>
-class CspVariable
+class CspVar
 {
 public:
-    CspVariable()
+    CspVar(const CspDomain<DataType>& cspDomain)
         : m_isAssigned(false),
+          m_domain(cspDomain),
           m_value()
     {}
 
-    bool isAssigned() { return this->m_isAssigned; }
+    CspVar()
+        : m_isAssigned(false),
+          m_domain(),
+          m_value()
+    {}
+
+    void setDomain(const CspDomain<DataType>& cspDomain)
+    {
+        this->m_domain = cspDomain;
+    }
+
+    bool isAssigned() const
+    {
+        return this->m_isAssigned;
+    }
     
     void setValue(const DataType& value)
     {
@@ -21,18 +38,21 @@ public:
         this->m_value = value;
     }
 
-    DataType getValue() const { return this->m_value; }
+    DataType getValue() const
+    {
+        return this->m_value;
+    }
+
+    CspDomain<DataType> getDomain() const
+    {
+        return this->m_domain;
+    }
 
 private:
     bool m_isAssigned;
+    CspDomain<DataType> m_domain;
     DataType m_value;
 };
-
-template <class DataType>
-using CspVar = CspVariable<DataType>;
-
-template <class IdType, class DataType>
-using CspVarMap = std::map<IdType, CspVar<DataType>>;
 
 #endif /* CSP_VARIABLE_H */
 

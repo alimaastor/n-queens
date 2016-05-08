@@ -15,5 +15,5 @@ all: $(OBJ)
 	$(CXX) $@ -c $< -I$(SRCDIR)
 
 clean:
-	-rm -f *.o
+	-rm -f $(OBJ)
 	-rm $(BIN)

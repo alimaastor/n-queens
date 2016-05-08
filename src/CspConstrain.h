@@ -3,11 +3,12 @@
 #define CSP_CONSTRAIN_H
 
 #include "CspVar.h"
+#include "CspState.h"
 
 #include <functional>
 
 template <class IdType, class DataType>
-using CspConstrainFunction = std::function<bool (const CspVarMap<IdType, DataType>&)>;
+using CspConstrainFunction = std::function<bool (const CspState<IdType, DataType>&)>;
 
 template <class IdType, class DataType>
 class CspConstrainBase
@@ -17,9 +18,9 @@ public:
         : m_func(f)
     {}
 
-    virtual bool isValid(const CspVarMap<IdType, DataType>& varMap) const final
+    virtual bool isValid(const CspState<IdType, DataType>& state) const final
     {
-        return this->m_func(varMap);
+        return this->m_func(state);
     }
 
 private:

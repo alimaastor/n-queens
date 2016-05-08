@@ -8,6 +8,10 @@ template <class DataType>
 class CspDomain
 {
 public:
+    CspDomain(const std::vector<DataType>& domainValues)
+        : m_domainValues(domainValues)
+    {}
+
     CspDomain()
         : m_domainValues()
     {}

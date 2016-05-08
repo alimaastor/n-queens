@@ -1,34 +1,40 @@
 
-#include "Csp.h"
+#include "CspConstrains.h"
+#include "CspState.h"
+#include "CspDomain.h"
+
+#include "BacktrackingSearch.h"
 
 #include <iostream>
 #include <cstdlib>
 
-int main(int argc, char *argv[])
+template <class IdType, class DataType>
+void BuildNQueensCsp(CspState<IdType, DataType>& cspState,
+                     CspConstrains<IdType, DataType>& cspConstrains,
+                     const size_t& size)
 {
-    const int size = 5;
-    Csp<int, int> csp;
-    for (int i = 0; i < size; i++)
+    // Create domain for all variables.
+    std::vector<DataType> domainValues(size);
+    std::iota(std::begin(domainValues), std::end(domainValues), 0);
+    CspDomain<DataType> cspDomain(domainValues);
+
+    // Create variables of the CSP problem.
+    for (IdType i = 0; i < size; i++)
     {
-        csp.addVar(i);
+        cspState.addVar(i, cspDomain);
     }
 
-    for (int i = 0; i < size - 1; i++)
+    // Create constrains.
+    for (IdType i = 0; i < size - 1; i++)
     {
-        for (int j = i + 1; j < size; j++)
+        for (IdType j = i + 1; j < size; j++)
         {
-            auto constrain = CspBinaryConstrain<int, int>(i, j,
-                    [i, j](const CspVarMap<int, int>& all_vars)->bool
+            // Diagonal constrain.
+            auto constrain = CspBinaryConstrain<IdType, DataType>(i, j,
+                    [i, j](const CspState<IdType, DataType>& state)->bool
                     {
-                        auto var1 = all_vars.find(i)->second;
-                        auto var2 = all_vars.find(j)->second;
-
-                        // A constrain cannot be violated if the variables
-                        // have not been set yet.
-                        if (!var1.isAssigned() || !var2.isAssigned())
-                        {
-                            return true;
-                        }
+                        auto value1 = state.getValue(i);
+                        auto value2 = state.getValue(j);
 
                         // We check that both values (positions of the queen)
                         // are not in the same diagonal.
@@ -48,34 +54,52 @@ int main(int argc, char *argv[])
                         // of those rows are equal to 2, the queens are threathening
                         // each other. In this case:
                         // |2 - 4| = 2 -> constrain violated.
-                        if (abs(var1.getValue() - var2.getValue()) == abs(i - j))
-                        {
-                            return false;
-                        }
+                        bool diagonal = (abs(value1 - value2) != abs(i - j));
 
-                        return true;
+                        // If both values are the same, they are in the same row and therefore
+                        // they are threathening each other.
+                        bool vertical = (value1 != value2);
+
+                        return diagonal && vertical;
                     });
-            csp.addBinaryConstrain(constrain);
+            cspConstrains.addBinaryConstrain(constrain);
         }
     }
+}
 
-    std::cout << "a" << std::endl;
+int main(int argc, char *argv[])
+{
+    const size_t size = 5;
+    CspConstrains<size_t, size_t> constrains;
+    CspState<size_t, size_t> state;
+    BuildNQueensCsp(state, constrains, size);
 
-    std::cout << "consistent " << csp.isConsistent() << std::endl;
-    std::cout << "isComplete " << csp.isComplete() << std::endl;
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    csp.setVar(0,2);
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    csp.setVar(1,0);
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    csp.setVar(2,3);
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    csp.setVar(3,1);
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    csp.setVar(4,4);
-    std::cout << "unassigned var: " << csp.getUnassignedVar() << std::endl;
-    std::cout << "consistent " << csp.isConsistent() << std::endl;
-    std::cout << "isComplete " << csp.isComplete() << std::endl;
+    auto solution = BacktrackingSearch(state, constrains);
+
+    for (auto pos : solution)
+    {
+        size_t x = pos.first;
+        size_t y = pos.second;
+        std::cout << "x=" << x << ", y=" << y << std::endl;
+    }
+    
+//    std::cout << "a" << std::endl;
+//
+//    std::cout << "consistent " << constrains.isConsistent(state) << std::endl;
+//    std::cout << "isComplete " << constrains.isComplete(state) << std::endl;
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    state.setVar(0,2);
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    state.setVar(1,0);
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    state.setVar(2,3);
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    state.setVar(3,1);
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    state.setVar(4,4);
+//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
+//    std::cout << "consistent " << constrains.isConsistent(state) << std::endl;
+//    std::cout << "isComplete " << constrains.isComplete(state) << std::endl;
 
 
 
