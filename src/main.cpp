@@ -1,16 +1,20 @@
 
-#include "Board.h"
+#include "Csp.h"
 
 #include <iostream>
 
 int main(int argc, char *argv[])
 {
-    Board board(50u);
-    Board::BoardPositions positions = {
-        {1, 2},
-        {3, 4},
-        {4, 4}
-    };
-    
-    board.updateAndPrint(positions);
+    Csp<int, int> csp;
+    for (int i = 0; i < 5; i++)
+    {
+        csp.addVar(i);
+    }
+
+
+
+
+
+
 }
+
