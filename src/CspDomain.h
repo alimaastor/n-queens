@@ -19,6 +19,10 @@ public:
     std::vector<DataType> getValues() const { return this->m_domainValues; }
     void addValue(const DataType& value) { this->m_domainValues.push_back(value); }
     void addValues(const std::vector<DataType>& values) { this->m_domainValues = values; }
+    void removeValue(const DataType& value)
+    {
+        this->m_domainValues.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
+    }
 
 private:
     std::vector<DataType> m_domainValues;

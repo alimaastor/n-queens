@@ -27,7 +27,7 @@ RecursiveBacktracking(const CspState<IdType, DataType>& state,
     }
 
     IdType varId = state.getIdUnassignedVar();
-    for (auto value : state.getVarDomain(varId).getValues())
+    for (const auto& value : state.getVarDomain(varId).getValues())
     {
         auto newState = state;
         newState.setVar(varId,  value);

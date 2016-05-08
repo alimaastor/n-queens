@@ -91,7 +91,7 @@ public:
     std::vector<std::pair<IdType, DataType>> getRaw() const
     {
         std::vector<std::pair<IdType, DataType>> solution;
-        for (auto var : this->m_varMap)
+        for (const auto& var : this->m_varMap)
         {
             if (var.second.isAssigned())
             {
