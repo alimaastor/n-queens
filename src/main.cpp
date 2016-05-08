@@ -2,13 +2,13 @@
 #include "CspConstrains.h"
 #include "CspState.h"
 #include "CspDomain.h"
-
 #include "BacktrackingSearch.h"
-
 #include "Board.h"
+#include "ArgParser.h"
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 template <class IdType, class DataType>
 void BuildNQueensCsp(CspState<IdType, DataType>& cspState,
@@ -69,9 +69,33 @@ void BuildNQueensCsp(CspState<IdType, DataType>& cspState,
     }
 }
 
+
+void usage(char* progName)
+{
+    std::cout << progName << " [options]" << std::endl <<
+            "Options:" << std::endl <<
+            "-h        Print this help" << std::endl <<
+            "-s N      Size of the board" << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
-    const size_t size = 10;
+    if (cmdOptionExists(argv, argv + argc, "-h"))
+    {
+        usage(argv[0]);
+        return 0;
+    }
+
+    size_t size;
+    if (auto cmd = getCmdOption(argv, argv + argc, "-s"))
+    {
+        size = static_cast<size_t>(std::stoi(cmd));
+    }
+    else
+    {
+        size = 10;
+    }
+    
     CspConstrains<size_t, size_t> constrains;
     CspState<size_t, size_t> state;
     BuildNQueensCsp(state, constrains, size);
@@ -80,26 +104,7 @@ int main(int argc, char *argv[])
 
     Board board(size);
     board.updateAndPrint(solution);
-//    std::cout << "a" << std::endl;
-//
-//    std::cout << "consistent " << constrains.isConsistent(state) << std::endl;
-//    std::cout << "isComplete " << constrains.isComplete(state) << std::endl;
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    state.setVar(0,2);
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    state.setVar(1,0);
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    state.setVar(2,3);
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    state.setVar(3,1);
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    state.setVar(4,4);
-//    std::cout << "unassigned var: " << state.getIdUnassignedVar() << std::endl;
-//    std::cout << "consistent " << constrains.isConsistent(state) << std::endl;
-//    std::cout << "isComplete " << constrains.isComplete(state) << std::endl;
 
-
-
-
+    return 0;
 }
 
