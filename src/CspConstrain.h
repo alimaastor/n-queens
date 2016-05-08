@@ -12,11 +12,12 @@ using CspConstrainFunction = std::function<bool (const CspVarMap<IdType, DataTyp
 template <class IdType, class DataType>
 class CspConstrainBase
 {
+public:
     CspConstrainBase(const CspConstrainFunction<IdType, DataType>& f)
         : m_func(f)
     {}
 
-    virtual bool check(const CspVarMap<IdType, DataType>& varMap) const final
+    virtual bool isValid(const CspVarMap<IdType, DataType>& varMap) const final
     {
         return this->m_func(varMap);
     }
