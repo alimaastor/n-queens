@@ -5,6 +5,8 @@
 
 #include "BacktrackingSearch.h"
 
+#include "Board.h"
+
 #include <iostream>
 #include <cstdlib>
 
@@ -69,20 +71,15 @@ void BuildNQueensCsp(CspState<IdType, DataType>& cspState,
 
 int main(int argc, char *argv[])
 {
-    const size_t size = 5;
+    const size_t size = 10;
     CspConstrains<size_t, size_t> constrains;
     CspState<size_t, size_t> state;
     BuildNQueensCsp(state, constrains, size);
 
     auto solution = BacktrackingSearch(state, constrains);
 
-    for (auto pos : solution)
-    {
-        size_t x = pos.first;
-        size_t y = pos.second;
-        std::cout << "x=" << x << ", y=" << y << std::endl;
-    }
-    
+    Board board(size);
+    board.updateAndPrint(solution);
 //    std::cout << "a" << std::endl;
 //
 //    std::cout << "consistent " << constrains.isConsistent(state) << std::endl;

@@ -93,7 +93,10 @@ public:
         std::vector<std::pair<IdType, DataType>> solution;
         for (auto var : this->m_varMap)
         {
-            solution.push_back(std::make_pair(var.first, var.second.getValue()));
+            if (var.second.isAssigned())
+            {
+                solution.push_back(std::make_pair(var.first, var.second.getValue()));
+            }
         }
         return solution;
     }

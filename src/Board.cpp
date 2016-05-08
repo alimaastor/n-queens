@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-void Board::updatePosition(const unsigned int& index_row, const unsigned int& index_col, const std::string& c)
+void Board::updatePosition(const size_t& index_row, const size_t& index_col, const std::string& c)
 {
     if (((index_col + index_row) % 2) == 0)
     {
@@ -17,9 +17,9 @@ void Board::updatePosition(const unsigned int& index_row, const unsigned int& in
 
 void Board::reset()
 {
-    for (unsigned int index_row = 0; index_row < this->m_size; index_row++)
+    for (size_t index_row = 0; index_row < this->m_size; index_row++)
     {
-        for (unsigned int index_column = 0; index_column < this->m_size; index_column++)
+        for (size_t index_column = 0; index_column < this->m_size; index_column++)
         {
             this->updatePosition(index_row, index_column, "  ");
         }
@@ -32,8 +32,8 @@ void Board::update(const BoardPositions& positions)
 
     for (auto queen_pos : positions)
     {
-        unsigned int index_row = queen_pos.first;
-        unsigned int index_col = queen_pos.second;
+        size_t index_row = queen_pos.first;
+        size_t index_col = queen_pos.second;
 
         this->updatePosition(index_row, index_col, "QQ");
     }

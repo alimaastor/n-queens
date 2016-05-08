@@ -33,7 +33,11 @@ RecursiveBacktracking(const CspState<IdType, DataType>& state,
         newState.setVar(varId,  value);
         if (constrains.isConsistent(newState))
         {
-            return RecursiveBacktracking(newState, constrains);
+            auto solution = RecursiveBacktracking(newState, constrains);
+            if (constrains.isComplete(solution))
+            {
+                return solution;
+            }
         }
     }
 
