@@ -4,6 +4,7 @@
 
 #include "CspConstrain.h"
 #include "CspState.h"
+#include "ArcQueue.h"
 
 #include <vector>
 
@@ -22,6 +23,23 @@ public:
     void addBinaryConstrain(const CspBinaryConstrain<IdType, DataType>& constrain)
     {
         this->m_binaryConstrains.push_back(constrain);
+    }
+
+    ArcQueue<IdType, DataType> getArcQueue() const
+    {
+        ArcQueue<IdType, DataType> arcQueue;
+
+        for (auto constrain : this->m_binaryConstrains)
+        {
+            arcQueue.addArc({std::make_pair(constrain.m_idFirst, constrain.m_idSecond), constrain});
+        }
+
+        return arcQueue;
+    }
+
+    Arc<IdType, DataType> getArcsForHead(IdType idHead)
+    {
+
     }
 
     bool isConsistent(const CspState<IdType, DataType>& state) const

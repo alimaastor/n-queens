@@ -16,12 +16,24 @@ public:
         : m_domainValues()
     {}
 
-    std::vector<DataType> getValues() const { return this->m_domainValues; }
-    void addValue(const DataType& value) { this->m_domainValues.push_back(value); }
-    void addValues(const std::vector<DataType>& values) { this->m_domainValues = values; }
+    std::vector<DataType> getValues() const
+    {
+        return this->m_domainValues;
+    }
+
+    void addValue(const DataType& value)
+    {
+        this->m_domainValues.push_back(value);
+    }
+
+    void addValues(const std::vector<DataType>& values)
+    {
+        this->m_domainValues = values;
+    }
+
     void removeValue(const DataType& value)
     {
-        this->m_domainValues.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
+        this->m_domainValues.erase(std::remove(this->m_domainValues.begin(), this->m_domainValues.end(), value), this->m_domainValues.end());
     }
 
 private:

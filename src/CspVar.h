@@ -48,6 +48,10 @@ public:
         return this->m_domain;
     }
 
+    void removeFromDomain(const DataType& value)
+    {
+        this->m_domain.removeValue(value);
+    }
 private:
     bool m_isAssigned;
     CspDomain<DataType> m_domain;

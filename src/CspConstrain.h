@@ -6,6 +6,7 @@
 #include "CspState.h"
 
 #include <functional>
+#include <algorithm>
 
 template <class IdType, class DataType>
 using CspConstrainFunction = std::function<bool (const CspState<IdType, DataType>&)>;
@@ -18,13 +19,17 @@ public:
         : m_func(f)
     {}
 
+    CspConstrainBase()
+        : m_func()
+    {}
+
     virtual bool isValid(const CspState<IdType, DataType>& state) const final
     {
         return this->m_func(state);
     }
 
 private:
-    const CspConstrainFunction<IdType, DataType> m_func;
+    CspConstrainFunction<IdType, DataType> m_func;
 };
 
 template <class IdType, class DataType>
@@ -37,8 +42,28 @@ public:
           m_idSecond(idSecond)
     {}
 
-    const IdType m_idFirst;
-    const IdType m_idSecond;
+    CspBinaryConstrain(const CspBinaryConstrain& other)
+        : CspConstrainBase<IdType, DataType>(other),
+          m_idFirst(other.m_idFirst),
+          m_idSecond(other.m_idSecond)
+    {}
+
+    CspBinaryConstrain()
+        : CspConstrainBase<IdType, DataType>(),
+          m_idFirst(),
+          m_idSecond()
+    {}
+
+    CspBinaryConstrain& operator=(CspBinaryConstrain other)
+    {
+        CspConstrainBase<IdType, DataType>::operator=(other);
+        this->m_idFirst = other.m_idFirst;
+        this->m_idSecond = other.m_idSecond;
+        return *this;
+    }
+
+    IdType m_idFirst;
+    IdType m_idSecond;
 };
 
 #endif /* CSP_CONSTRAIN_H */

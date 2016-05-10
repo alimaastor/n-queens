@@ -5,6 +5,8 @@
 #include "BacktrackingSearch.h"
 #include "Board.h"
 #include "ArgParser.h"
+#include "ArcQueue.h"
+#include "ArcConsistency.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -95,15 +97,16 @@ int main(int argc, char *argv[])
     {
         size = 10;
     }
-    
+
     CspConstrains<size_t, size_t> constrains;
     CspState<size_t, size_t> state;
     BuildNQueensCsp(state, constrains, size);
 
-    auto solution = BacktrackingSearch(state, constrains);
+//    auto solution = BacktrackingSearch(state, constrains);
+    auto solution = ArcConsistency(state, constrains);
 
-    Board board(size);
-    board.updateAndPrint(solution);
+//    Board board(size);
+//    board.updateAndPrint(solution);
 
     return 0;
 }

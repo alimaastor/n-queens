@@ -3,35 +3,36 @@
 #define ARC_CONSISTENCY_H
 
 template <class IdType, class DataType>
-CspState<IdType, DataType> ArcConsistency(const CspState<IdType, DataType>& state,
+CspState<IdType, DataType> ArcConsistency(CspState<IdType, DataType>& state,
                                           const CspConstrains<IdType, DataType>& constrains)
 {
-    auto arcDeque = constrains.getConstrainsDeque();
+    auto arcQueue = constrains.getArcQueue();
 
-    while (!arcDeque.empty())
+    while (!arcQueue.isEmpty())
     {
-        auto arc = arcDeque.front();
-        arcDeque.pop_front();
+        auto arc = arcQueue.popNext();
 
         IdType idTail = arc.first.first;
         IdType idHead = arc.first.second;
         auto constrain = arc.second;
 
-        if (removeInconsistentValues(idTail, idHead, state, constrain))
+        if (RemoveInconsistentValues(idTail, idHead, state, constrain))
         {
             auto arcs = constrains.getArcsForHead(idTail);
             for (const auto& arc : arcs)
             {
-                arcDeque.push_back(arc);
+                arcQueue.maybeAddArc(arc);
             }
         }
     }
+
+    return state;
 }
 
 template <class IdType, class DataType>
 bool RemoveInconsistentValues(const IdType& idTail, const IdType& idHead,
                               CspState<IdType, DataType>& state,
-                              const CspConstrain<IdType, DataType>& constrain)
+                              const CspBinaryConstrain<IdType, DataType>& constrain)
 {
     bool removed = false;
     
@@ -40,12 +41,25 @@ bool RemoveInconsistentValues(const IdType& idTail, const IdType& idHead,
 
     for (const auto& tailValue : tailDomain.getValues())
     {
+        bool removeValueFromTail = true;
         for (const auto& headValue : headDomain.getValues())
         {
             auto newState = state;
+            
             newState.setVar(idTail, tailValue);
-            newstate.setVar(idHead, headValue);
- 
+            newState.setVar(idHead, headValue);
+            
+            if (constrain.isValid(newState))
+            {
+                removeValueFromTail = false;
+                break;
+            }
+        }
+
+        if (removeValueFromTail)
+        {
+            removed = true;
+            state.removeValueFromDomain(idTail, tailValue);
         }
     }
 

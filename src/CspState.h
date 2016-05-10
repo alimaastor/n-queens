@@ -88,6 +88,16 @@ public:
         this->m_varMap[varId] = newVar;
     }
 
+    void removeValueFromDomain(const IdType& varId, const DataType& tailValue)
+    {
+        auto mapEntry = this->m_varMap.find(varId);
+        if (mapEntry == this->m_varMap.end())
+        {
+            throw std::runtime_error("Cannot set value: Variable does not exist");
+        }
+        mapEntry->second.removeFromDomain(tailValue);
+    }
+
     std::vector<std::pair<IdType, DataType>> getRaw() const
     {
         std::vector<std::pair<IdType, DataType>> solution;
