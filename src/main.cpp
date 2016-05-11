@@ -35,7 +35,7 @@ void BuildNQueensCsp(CspState<IdType, DataType>& cspState,
         {
             // Diagonal constrain.
             auto constrain = CspBinaryConstrain<IdType, DataType>(i, j,
-                    [i, j](const CspState<IdType, DataType>& state)->bool
+                    [=](const CspState<IdType, DataType>& state)->bool
                     {
                         auto value1 = state.getValue(i);
                         auto value2 = state.getValue(j);

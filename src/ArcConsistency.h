@@ -45,10 +45,10 @@ bool RemoveInconsistentValues(const IdType& idTail, const IdType& idHead,
         for (const auto& headValue : headDomain.getValues())
         {
             auto newState = state;
-            
+
             newState.setVar(idTail, tailValue);
             newState.setVar(idHead, headValue);
-            
+
             if (constrain.isValid(newState))
             {
                 removeValueFromTail = false;

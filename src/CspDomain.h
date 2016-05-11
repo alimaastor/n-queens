@@ -3,6 +3,7 @@
 #define CSP_DOMAIN_H
 
 #include <vector>
+#include <algorithm>
 
 template <class DataType>
 class CspDomain
@@ -34,6 +35,11 @@ public:
     void removeValue(const DataType& value)
     {
         this->m_domainValues.erase(std::remove(this->m_domainValues.begin(), this->m_domainValues.end(), value), this->m_domainValues.end());
+    }
+
+    bool isEmpty()
+    {
+        return this->m_domainValues.empty();
     }
 
 private:

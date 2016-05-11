@@ -4,6 +4,8 @@
 
 #include <map>
 #include <algorithm>
+#include <stdexcept>
+#include <iostream>
 
 #include "CspVar.h"
 

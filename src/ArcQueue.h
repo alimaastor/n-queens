@@ -7,43 +7,49 @@
 #include <deque>
 
 template <class IdType, class DataType>
+using Arc = std::pair<const std::pair<IdType, IdType>, CspBinaryConstrain<IdType, DataType>>;
+
+template <class IdType, class DataType>
 class ArcQueue
 {
 public:
     ArcQueue()
-        : m_arcMap(),
+        : m_constrainDeque(),
           m_arcDeque()
     {}
-
-    using Arc = std::pair<const std::pair<IdType, IdType>, CspBinaryConstrain<IdType, DataType>>;
 
     bool isEmpty() const
     {
         return this->m_arcDeque.empty();
     }
 
-    Arc popNext()
+    Arc<IdType, IdType> popNext()
     {
-        auto key = this->m_arcDeque.at(0);
+        auto arc = this->m_arcDeque.at(0);
         this->m_arcDeque.pop_front();
 
-        auto it = this->m_arcMap.find(key);
-        this->m_arcMap.erase(key);
+        auto constrain = this->m_constrainDeque.at(0);
+        this->m_constrainDeque.pop_front();
 
-        return {key, it->second};
+        return {arc, constrain};
     }
 
-    void maybeAddArc(const Arc& arc)
+    void maybeAddArc(const Arc<IdType, IdType>& newArc)
     {
-        if (this->m_arcMap.find(arc.first) == this->m_arcMap.end())
+        for (const auto& arc : this->m_arcDeque)
         {
-            this->m_arcDeque.push_back(arc.first);
-            this->m_arcMap[arc.first] = arc.second;
+            if (arc.first == newArc.first.first && arc.second == newArc.first.second)
+            {
+                return;
+            }
         }
+
+        this->m_arcDeque.push_back(newArc.first);
+        this->m_constrainDeque.push_back(newArc.second);
     }
 
 private:
-    std::map<std::pair<IdType, IdType>, CspBinaryConstrain<IdType, DataType>> m_arcMap;
+    std::deque<CspBinaryConstrain<IdType, DataType>> m_constrainDeque;
     std::deque<std::pair<IdType, IdType>> m_arcDeque;
 };
 

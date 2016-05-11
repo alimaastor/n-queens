@@ -31,6 +31,11 @@ public:
     {
         return this->m_isAssigned;
     }
+ 
+    bool isDomainEmpty() const
+    {
+        return this->m_domain.isEmpty();
+    }
     
     void setValue(const DataType& value)
     {
