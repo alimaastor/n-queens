@@ -27,6 +27,11 @@ public:
         this->m_domain = cspDomain;
     }
 
+    size_t domainLen() const
+    {
+        return this->m_domain.len();
+    }
+
     bool isAssigned() const
     {
         return this->m_isAssigned;
@@ -40,6 +45,7 @@ public:
     void setValue(const DataType& value)
     {
         this->m_isAssigned = true;
+        this->m_domain.setValue(value);
         this->m_value = value;
     }
 

@@ -14,6 +14,12 @@ CspState<IdType, DataType> ArcConsistency(CspState<IdType, DataType>& state,
 
         IdType idTail = arc.first.first;
         IdType idHead = arc.first.second;
+
+        if (state.isVarAssigned(idTail) && state.isVarAssigned(idHead))
+        {
+            continue;
+        }
+
         auto constrain = arc.second;
 
         if (RemoveInconsistentValues(idTail, idHead, state, constrain))

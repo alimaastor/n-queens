@@ -4,6 +4,7 @@
 
 #include "CspState.h"
 #include "CspConstrains.h"
+#include "ArcConsistency.h"
 
 #include <vector>
 
@@ -21,12 +22,17 @@ CspState<IdType, DataType>
 RecursiveBacktracking(const CspState<IdType, DataType>& state,
                       const CspConstrains<IdType, DataType>& constrains)
 {
-    if (constrains.isComplete(state))
-    {
-        return state;
-    }
+//    auto state = unfilteredState;
+//    state = ArcConsistency(state, constrains);
+//
+//    if (!constrains.isConsistent(state) || constrains.isComplete(state))
+//    {
+//        return state;
+//    }
 
     IdType varId = state.getIdUnassignedVar();
+    //IdType varId = state.getIdVarMaxRemainingValues();
+    //IdType varId = state.getIdVarMinRemainingValues();
     for (const auto& value : state.getVarDomain(varId).getValues())
     {
         auto newState = state;

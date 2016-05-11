@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <iostream>
+
 template <class DataType>
 class CspDomain
 {
@@ -22,6 +24,16 @@ public:
         return this->m_domainValues;
     }
 
+    size_t len() const
+    {
+        return this->m_domainValues.size();
+    }
+
+    void setValue(const DataType& value)
+    {
+        this->m_domainValues = {value};
+    }
+
     void addValue(const DataType& value)
     {
         this->m_domainValues.push_back(value);
@@ -37,7 +49,7 @@ public:
         this->m_domainValues.erase(std::remove(this->m_domainValues.begin(), this->m_domainValues.end(), value), this->m_domainValues.end());
     }
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return this->m_domainValues.empty();
     }
